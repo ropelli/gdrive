@@ -23,20 +23,20 @@ jobs:
 
       - name: Build application
         run: |
-           docker build -t cargo-arm64-build -f - . <<EOF
-             FROM ubuntu:22.04
-             RUN apt-get update && apt-get install -y \
-                   build-essential \
-                   curl \
-                   gcc-aarch64-linux-gnu \
-                 && rm -rf /var/lib/apt/lists/* \
-                 && curl https://sh.rustup.rs -o rustup.sh \
-                 && chmod 755 rustup.sh \
-                 && ./rustup.sh -y -t aarch64-unknown-linux-gnu
-             WORKDIR /workspace
-             ENTRYPOINT /root/.cargo/bin/cargo
-           EOF
-           docker run --rm -t -v $HOME/.cargo/registry/:/root/.cargo/registry -v "$(pwd)":/volume cargo-arm64-build build --release --target aarch64-unknown-linux-gnu
+          docker build -t cargo-arm64-build -f - . <<EOF
+            FROM ubuntu:22.04
+            RUN apt-get update && apt-get install -y \
+                build-essential \
+                curl \
+                gcc-aarch64-linux-gnu \
+                && rm -rf /var/lib/apt/lists/* \
+                && curl https://sh.rustup.rs -o rustup.sh \
+                && chmod 755 rustup.sh \
+                && ./rustup.sh -y -t aarch64-unknown-linux-gnu
+            WORKDIR /workspace
+            ENTRYPOINT ["/root/.cargo/bin/cargo"]
+          EOF
+          docker run --rm -t -v $HOME/.cargo/registry/:/root/.cargo/registry -v "$(pwd)":/workspace cargo-arm64-build build --release --target aarch64-unknown-linux-gnu
 
       - name: Create archive
         run: |
