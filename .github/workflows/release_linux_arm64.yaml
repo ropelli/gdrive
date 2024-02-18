@@ -34,7 +34,7 @@ jobs:
                  && chmod 755 rustup.sh \
                  && ./rustup.sh -y -t aarch64-unknown-linux-gnu
              WORKDIR /workspace
-             CMD /root/.cargo/bin/cargo
+             ENTRYPOINT /root/.cargo/bin/cargo
            EOF
            docker run --rm -t -v $HOME/.cargo/registry/:/root/.cargo/registry -v "$(pwd)":/volume cargo-arm64-build build --release --target aarch64-unknown-linux-gnu
 
